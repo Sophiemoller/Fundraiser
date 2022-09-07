@@ -1,0 +1,20 @@
+<?php
+/* search bar */
+if (isset($_POST['search'])) {
+    $search = $_POST['search'];
+
+    $query1 = "SELECT * FROM donors WHERE Fname LIKE '%$search%'";
+    $query = mysqli_query($con, $query1);
+    $count = mysqli_num_rows($query);
+
+    if ($count == 0) {
+        echo "<p>" . "There was no search results";
+    } else {
+
+        while ($row = mysqli_fetch_array($query)) {
+            echo "<p>" . $row ['Fname'];
+
+        }
+    }
+}
+?>
