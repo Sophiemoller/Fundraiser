@@ -1,0 +1,30 @@
+<?php
+/* view all donors options table */
+if (isset($_POST['testquery1'])) {
+    $result = mysqli_query($con, "SELECT * FROM donors");
+    if (mysqli_num_rows($result) != 0) {
+        echo "<table>";
+        echo "<thead>";
+        echo "<tr>";
+        echo "<th class='FnameColumn'>Fname </th>";
+        echo "<th class='LnameColumn'>Lname </th>";
+        echo "<th class ='MobileColumn'>Mobile</th>";
+        echo "<th class ='EmailColumn'>Email</th>";
+        echo "</tr>";
+        echo "</thead>";
+        while ($test = mysqli_fetch_array($result)) {
+            $id = $test['DonorID'];
+
+            echo "<tr>";
+            echo "<td>" . $test['Fname'] . "</td>";
+            echo "<td>" . $test['Lname'] . "</td>";
+            echo "<td>" . $test['Mobile'] . "</td>";
+            echo "<td>" . $test['Email'] . "</td>";
+            echo "</tr>";
+
+
+        }
+        echo "</table>";
+    }
+}
+?>
