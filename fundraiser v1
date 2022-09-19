@@ -1,0 +1,126 @@
+<?php
+/* connecting website to database */
+$con = mysqli_connect("localhost", "mollerso", "goodhen60", "mollerso_fundraiser");
+if (mysqli_connect_errno()) {
+    echo "Failed to connect to MySQL:" . mysqli_connect_error();
+    die();
+} else {
+    echo "connected to database";
+}
+/* Assigning values for search bar */
+if(isset($_GET['donation'])){
+    $id = $_GET['donation'];
+}else {
+    $id = 1;
+}
+
+/* Donations Query */
+/*SELECT SELECT donations.Amount, donations.DonationsID, donations.DonorsID, donations.FundraiserID, donors.Fname,
+donors.Lname, donors.Email, fundraisers.Name, fundraisers.Blurb FROM donations, donors, fundraisers WHERE donations.DonorsID
+= fundraisers.fundraiserID AND donations.FundraiserID = donors.DonorID AND donations.DonationsID = 1*/
+$this_donations_query = "SELECT donations.Amount, donations.DonationsID, donations.DonorID, donations.FundraiserID, 
+       donors.Fname, donors.Lname, donors.Email, fundraisers.Name, fundraisers.Blurb FROM donations, donors, fundraisers
+WHERE donors.DonorID = donations.DonorID AND fundraisers.FundraiserID = donations.FundraiserID AND donations.DonationsID='" .$id."'";
+$this_donations_result = mysqli_query($con, $this_donations_query);
+$this_donations_record = mysqli_fetch_assoc($this_donations_result);
+
+/* donations Query */
+/*SELECT Weekday, DrinkName, FoodName FROM specials */
+$all_donations_query = "SELECT DonationsID, Amount FROM donations";
+$all_donations_result = mysqli_query($con, $all_donations_query);
+
+/* Update and delete donations query*/
+$update_donations ="SELECT * FROM donations";
+$update_donations_record = mysqli_query($con, $update_donations);
+
+?>
+
+<!-- HTML code for website -->
+<!DOCTYPE html>
+<html lang="en"> <!-- setting language to english-->
+<head>
+    <!-- title for website -->
+    <title> HELPING HAND </title>
+    <!-- adjusting screen size to fit different sized devices-->
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <!-- linking html code to css -->
+    <link rel='stylesheet' type='text/css' href='style.css'>
+</head>
+<body>
+<header>
+    <!-- main header for website -->
+    <h1> HELPING HAND </h1>
+    <nav>
+        <ul>
+            <!-- linking pages together through buttons -->
+            <li><a href="fundraisers.php">FUNDRAISERS</a></li>
+            <li><a href="donors.php">DONORS</a></li>
+            <li><a href="donations.php">DONATIONS</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <!-- header for donations page -->
+    <h2> Donations Information </h2>
+
+    <?php
+    /* presenting data for fundraiser information*/
+    echo "<p> Fundraiser: " . $this_donations_record['Name'] . "<br>";
+    echo "<p> Donor First Name: " . $this_donations_record['Fname'];
+    echo "<p> Donor Last Name: " . $this_donations_record['Lname'];
+    echo "<p> Amount: $" . $this_donations_record['Amount'];
+
+    ?>
+
+    <h2> Select Another Donation </h2>
+    <!--Donation form-->
+    <form name='donations form' id=donations form
+    ' method='get' action='donations.php'>
+    <select id='donation' name='donation'>
+        <!--options-->
+        <?php
+        while ($all_donations_record = mysqli_fetch_assoc($all_donations_result)) {
+            echo "<option value = '" . $all_donations_record['DonationsID'] . "'>";
+            echo $all_donations_record['DonationsID'];
+            echo "</option>";
+        }
+
+        ?>
+    </select>
+    <input type='submit' name='donations_button' value='Show me the donations information'>
+    </form>
+
+    <h2> Make Donation </h2>
+    <form action="insert_donations.php" method="post">
+        DonorID : <input type="text" name="DonorID"><br>
+        FundraiserID: <input type="text" name="FundraiserID"><br>
+        Amount: $ <input type="text" name="Amount"><br>
+        <input type="submit" value="Insert">
+    </form>
+
+    <h2> Update donations </h2>
+    <table>
+        <tr>
+            <th> Fundraiser ID </th>
+            <th> Donor ID </th>
+            <th> Donation Amount </th>
+            <th> Donation ID </th>
+            <th> Submit </th>
+            <th> Delete </th>
+        </tr>
+        <?php
+        while($row = mysqli_fetch_array($update_donations_record))
+        {
+            echo "<tr><form action=update_donations.php method=post>";
+            echo "<td><input type=text name=DonorID value='" .$row['DonorID']. "'></td>";
+            echo "<td><input type=text name=FundraiserID value='" .$row['FundraiserID']. "'></td>";
+            echo "<td><input type=text name=Amount value='" .$row['Amount']. "'></td>";
+            echo "<td><input type=text name=DonationsID value='" .$row['DonationsID']. "'></td>";
+            echo "<td><input type =submit></td>";
+            echo "<td><a href=delete.php?DonationsID=" .$row['DonationsID']. ">Delete</a></td>";
+            echo "</form></tr>";
+        }
+        ?>
+    </table>
+</main>
+</body>
