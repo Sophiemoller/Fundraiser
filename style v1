@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin&display=swap');
+
+body {
+    /*background colour for website*/
+    background-color: #D8F8FA;;
+}
+
+ul {
+    /*text alignment for ul function (list)*/
+    list-style-type: none;
+    text-align: center;
+}
+
+li {
+    display: inline;
+}
+
+a {
+    /* text colour, alignment and font size and style for nav bar*/
+    text-decoration: none;
+    padding: 8px;
+    font-family: 'Cabin', sans-serif;
+    color: teal;
+    background-color: #D8F8FA;
+    font-size: 30px;
+    text-align: center;
+    line-height:70px;
+    opacity: 0.6;
+    position: relative;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+a:hover {
+    /* for mouse colour and opacity */
+    opacity: 1
+}
+h1 {
+    /* text colour, alignment and font size and style, background colour for headings */
+    font-size:70px;
+    text-align:center;
+    font-family: 'Cabin', sans-serif;
+    color: teal;
+    background-color:#D8F8FA;
+    padding: 0px;
+}
+
+h2 {
+    /* text colour, alignment and font size and style, background colour for sub headings */
+    font-family: 'Cabin', sans-serif;
+    color: teal;
+    font-size:35px;
+}
+
+p {
+    /* text colour, alignment and font size and style, background colour for paragraph text */
+    font-family: 'Cabin', sans-serif;
+    color: teal;
+    font-size:20px;
+}
+.footer {
+    /* text colour, alignment and font size and style, background colour for footer */
+    background-color: teal;
+    font-family: 'Cabin', sans-serif;
+    text-overline-color: white;
+    color: rgb(242, 244, 247);
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+}
+
+input[type=submit] {
+    /* text colour, alignment and font size and style, background colour for table */
+    background-color: teal;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Cabin', sans-serif;
+}
+
+input[type=text], select, textarea {
+    /* text colour, alignment and font size and style, background colour for table */
+    margin-left: 50px;
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+    font-family: 'Cabin', sans-serif;
+}
+.BlurbColumn {
+    /* drink table width*/
+    width: 200px;
+}
+
+.NameColumn {
+    /* food table width*/
+    width: 200px;
+}
+
+.GoalColumn {
+    /* cost table width*/
+    width: 200px;
+}
+
+.MobileColumn {
+    /* stock table width*/
+    width: 200px;
+}
+
+.EmailColumn {
+    /* stock table width*/
+    width: 200px;
+}
+
+.FnameColumn {
+    /* stock table width*/
+    width: 200px;
+}
+
+.LnameColumn {
+    /* stock table width*/
+    width: 200px;
+}
+
+.DonorIDColumn {
+    /* stock table width*/
+    width: 200px;
+}
+
+.FundraiserIDColumn {
+    /* stock table width*/
+    width: 200px;
+}
+
+table {
+    /* table colour and font*/
+    margin: auto;
+    border: thick solid teal;
+    border-spacing: 0;
+    font-family: 'Hammersmith One', sans-serif;
+    color: teal;
+    margin-bottom: 50px;
+}
+
+td {
+    border: solid teal;
+}
+
+tr {
+    border: solid teal;
+}
