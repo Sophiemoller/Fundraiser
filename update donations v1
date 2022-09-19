@@ -1,0 +1,22 @@
+<?php
+/* Connect to the database */
+$dbcon = mysqli_connect("localhost", "mollerso", "goodhen60", "mollerso_fundraiser");
+if($dbcon == NULL) {
+    echo "Could not connect to database";
+    exit();
+}
+$update_donations = "UPDATE donations SET DonorID='$_POST[DonorID]', FundraiserID= '$_POST[FundraiserID]', Amount='$_POST[Amount]' WHERE DonationsID='$_POST[DonationsID]'";
+
+if(!mysqli_query($dbcon, $update_donations))
+{
+    echo 'Not Updated';
+}
+else
+{
+    echo 'Updated';
+}
+
+/* Refresh the page after 2 seconds and return to the donors.php page */
+header("refresh:2; url=donations.php");
+
+?>
