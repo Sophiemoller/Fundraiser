@@ -1,0 +1,228 @@
+?php
+/* connecting website to database */
+$con = mysqli_connect("localhost", "mollerso", "goodhen60", "mollerso_fundraiser");
+if (mysqli_connect_errno()) {
+    echo "Failed to connect to MySQL:" . mysqli_connect_error();
+    die();
+} else {
+    echo "connected to database";
+}
+
+/* assigning variables in queries values*/
+if (isset($_GET['donor'])) {
+    $id = $_GET['donor'];
+} else {
+    $id = 1;
+}
+
+/* Donors Query */
+/*SELECT DonorID, Fname, Lname, Mobile, Email FROM donors */
+$this_donor_query = "SELECT DonorID, Fname, Lname, Mobile, Email FROM donors WHERE donors.DonorID = '" . $id . "'";
+$this_donor_result = mysqli_query($con, $this_donor_query);
+$this_donor_record = mysqli_fetch_assoc($this_donor_result);
+
+$all_donor_query = "SELECT DonorID, Fname, Lname FROM donors";
+$all_donor_result = mysqli_query($con, $all_donor_query);
+
+/* Update query donors */
+$update_donors ="SELECT * FROM donors";
+$update_donors_record = mysqli_query($con, $update_donors);
+?>
+
+<!-- HTML code for website -->
+<!DOCTYPE html>
+<html lang="en"> <!-- setting language to english-->
+<head>
+    <!-- title for website -->
+    <title> HELPING HAND </title>
+    <!-- adjusting screen size to fit different sized devices-->
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <!-- linking html code to css -->
+    <link rel='stylesheet' type='text/css' href='style.css'>
+</head>
+<body>
+<header>
+    <!-- main header for website -->
+    <h1> HELPING HAND </h1>
+    <nav>
+        <ul>
+            <!-- linking pages together through buttons -->
+            <li><a href="fundraisers.php">FUNDRAISERS</a></li>
+            <li><a href="donors.php">DONORS</a></li>
+            <li><a href="donations.php">DONATIONS</a></li>
+        </ul>
+    </nav>
+</header>
+<!-- header for search bar -->
+<h2> Search donors </h2>
+<form action=" " method="post">
+    <input type="text" name='search'>
+    <input type="submit" name="submit" value="search">
+</form>
+<?php
+/* search bar */
+if (isset($_POST['search'])) {
+    $search = $_POST['search'];
+
+    $query1 = "SELECT * FROM donors WHERE Fname LIKE '%$search%'";
+    $query = mysqli_query($con, $query1);
+    $count = mysqli_num_rows($query);
+
+    if ($count == 0) {
+        echo "<p>" . "There was no search results";
+    } else {
+
+        while ($row = mysqli_fetch_array($query)) {
+            echo "<p>" . $row ['Fname'];
+
+        }
+    }
+}
+?>
+
+<!-- header for donor page -->
+<h2> Donors Information </h2>
+
+<?php
+/* presenting data for donors information*/
+echo "<p> DonorID: " . $this_donor_record['DonorID'] . "<br>";
+echo "<p> First Name: " . $this_donor_record['Fname'] . "<br>";
+echo "<p> Last Name: " . $this_donor_record['Lname'] . "<br>";
+echo "<p> Phone Number: " . $this_donor_record['Mobile'] . "<br>";
+echo "<p> Email: " . $this_donor_record['Email'] . "<br>";
+?>
+
+<h2> Select Another Donor </h2>
+<!--Donor form-->
+<form name='donors form' id=donors form
+' method='get' action='donors.php'>
+<select id='donor' name='donor'>
+    <!--options-->
+    <?php
+    while ($all_donor_record = mysqli_fetch_assoc($all_donor_result)) {
+        echo "<option value = '" . $all_donor_record['DonorID'] . "'>";
+        echo $all_donor_record['Fname'];
+        echo "</option>";
+    }
+
+    ?>
+</select>
+<input type='submit' name='donors_button' value='Show me the donors information'>
+</form>
+
+<h2> Add Donor </h2>
+<form action="insert.php" method="post">
+    Donor First Name : <input type="text" name="Fname"><br>
+    Donor Last Name: <input type="text" name="Lname"><br>
+    Donor Email: <input type="text" name="Email"><br>
+    Donor Mobile: <input type="text" name="Mobile"><br>
+    <input type="submit" value="Insert">
+</form>
+
+<h2> Update donors </h2>
+<table>
+    <tr>
+        <th> Donor First Name </th>
+        <th> Donor Last Name </th>
+        <th> Donor Email </th>
+        <th> Donor Mobile </th>
+        <th> Submit </th>
+    </tr>
+    <?php
+    while($row = mysqli_fetch_array($update_donors_record))
+    {
+        echo "<tr><form action=update.php method=post>";
+        echo "<td><input type=text name=Fname value='" .$row['Fname']. "'></td>";
+        echo "<td><input type=text name=Lname value='" .$row['Lname']. "'></td>";
+        echo "<td><input type=text name=Email value='" .$row['Email']. "'></td>";
+        echo "<td><input type=text name=Mobile value='" .$row['Mobile']. "'></td>";
+        echo "<input type=hidden name=DonorID value='" .$row['DonorID']. "'>";
+        echo "<td><input type =submit></td>";
+        echo "</form></tr>";
+    }
+    ?>
+</table>
+
+
+
+<h2> View all donors</h2>
+<!-- view all donors  -->
+<form action="donors.php" method="post">
+    <input type='submit' name='testquery1' value="Donors">
+</form>
+
+<?php
+/* view all donors options table */
+if (isset($_POST['testquery1'])) {
+    $result = mysqli_query($con, "SELECT * FROM donors");
+    if (mysqli_num_rows($result) != 0) {
+        echo "<table>";
+        echo "<thead>";
+        echo "<tr>";
+        echo "<th class='DonorIDColumn'>DonorID </th>";
+        echo "<th class='FnameColumn'>Fname </th>";
+        echo "<th class='LnameColumn'>Lname </th>";
+        echo "<th class ='MobileColumn'>Mobile</th>";
+        echo "<th class ='EmailColumn'>Email</th>";
+        echo "</tr>";
+        echo "</thead>";
+        while ($test = mysqli_fetch_array($result)) {
+            $id = $test['DonorID'];
+
+            echo "<tr>";
+            echo "<td>" . $test['DonorID'] . "</td>";
+            echo "<td>" . $test['Fname'] . "</td>";
+            echo "<td>" . $test['Lname'] . "</td>";
+            echo "<td>" . $test['Mobile'] . "</td>";
+            echo "<td>" . $test['Email'] . "</td>";
+            echo "</tr>";
+
+
+        }
+        echo "</table>";
+    }
+}
+?>
+
+<div class="row">
+    <!-- sorting donors A-Z form -->
+    <form action="donors.php" method="post">
+        <input type='submit' name='testquery2' value="Sort A-Z">
+    </form>
+</div>
+<?php
+/* sort donors by alphabetical order */
+if (isset($_POST['testquery2'])) {
+    $result = mysqli_query($con, "SELECT * FROM donors ORDER BY donors.Fname ASC");
+    if (mysqli_num_rows($result) != 0) {
+        echo "<table>";
+        echo "<thead>";
+        echo "<tr>";
+        echo "<th class='DonorIDColumn'>DonorID</th>";
+        echo "<th class='FnameColumn'>Fname</th>";
+        echo "<th class='LnameColumn'>Lname </th>";
+        echo "<th class ='MobileColumn'>Mobile</th>";
+        echo "<th class ='EmailColumn'>Email</th>";
+        echo "</tr>";
+        echo "</thead>";
+        while ($test = mysqli_fetch_array($result)) {
+            $id = $test['DonorID'];
+
+            echo "<tr>";
+            echo "<td>" . $test['DonorID'] . "</td>";
+            echo "<td>" . $test['Fname'] . "</td>";
+            echo "<td>" . $test['Lname'] . "</td>";
+            echo "<td>" . $test['Mobile'] . "</td>";
+            echo "<td>" . $test['Email'] . "</td>";
+            echo "</tr>";
+
+
+        }
+        echo "</table>";
+    }
+}
+?>
+
+
+</body>
+<main>
