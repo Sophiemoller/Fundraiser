@@ -1,0 +1,27 @@
+<?php
+/* Connect to the database */
+$dbcon = mysqli_connect("localhost", "mollerso", "goodhen60", "mollerso_fundraiser");
+if($dbcon == NULL) {
+    echo "Could not connect to database";
+    exit();
+}
+
+/* Insert into donor table Query */
+$Fname = $_POST['Fname'];
+$Lname = $_POST['Lname'];
+$Email = $_POST['Email'];
+$Mobile = $_POST['Mobile'];
+
+$insert_donor = "INSERT INTO donors (Fname, Lname, Email, Mobile) VALUES('$Fname', '$Lname', '$Email', '$Mobile')";
+
+/* Check the data has been inserted */
+if(!mysqli_query($dbcon, $insert_donor)) {
+    echo 'Inserted Failed!';
+} else {
+    echo 'Insert Successful!';
+}
+
+/* Refresh the page after 2 seconds and return to the add_donors.php page */
+header("refresh:2; url=donors.php");
+
+?>
